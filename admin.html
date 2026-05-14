@@ -1,0 +1,1224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>Lumina — Admin</title>
+<meta name="viewport" content="width=1440" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+/* Admin palette — straight from DESIGN.md */
+:root {
+  --fg:        #1a1918;
+  --bg:        #e8e3d3;
+  --card:      #ede8d8;
+  --secondary: #d5d0c1;
+  --border:    #c5c0b2;
+  --muted-fg:  #6b6760;
+  --destructive:#b91c1c;
+  --radius:    0;
+  --hair:      1px;
+
+  --font-heading: "Bebas Neue", "Oswald", sans-serif;
+  --font-sans:    "Geist", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font-family: var(--font-sans); font-size: 14px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+input, select, textarea { font-family: inherit; font-size: inherit; color: inherit; }
+
+/* ── Type primitives ────────────────────────────────── */
+.heading { font-family: var(--font-heading); letter-spacing: 0.02em; line-height: 1; text-transform: uppercase; }
+.eyebrow { font-family: var(--font-sans); font-weight: 500; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-fg); }
+.label   { font-family: var(--font-sans); font-weight: 600; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* ── Shell layout ───────────────────────────────────── */
+.shell {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+}
+.sidebar {
+  background: var(--card);
+  border-right: var(--hair) solid var(--border);
+  padding: 24px 0;
+  display: flex; flex-direction: column;
+  position: sticky; top: 0; height: 100vh;
+}
+.sidebar__brand {
+  padding: 0 24px 32px;
+  display: flex; align-items: baseline; gap: 8px;
+  border-bottom: var(--hair) solid var(--border);
+  margin-bottom: 24px;
+}
+.sidebar__brand .mark {
+  font-family: var(--font-heading);
+  font-size: 28px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+}
+.sidebar__brand .v {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  padding: 2px 6px;
+  border: var(--hair) solid var(--border);
+}
+.nav-group { padding: 8px 12px; }
+.nav-group__title {
+  padding: 8px 12px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-fg);
+}
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fg);
+  border-left: 2px solid transparent;
+  margin-left: -12px;
+  padding-left: 22px;
+  transition: background 100ms;
+}
+.nav-item .count {
+  margin-left: auto;
+  font-size: 11px;
+  color: var(--muted-fg);
+  font-variant-numeric: tabular-nums;
+}
+.nav-item:hover { background: var(--secondary); }
+.nav-item.is-active {
+  background: var(--secondary);
+  border-left-color: var(--fg);
+  font-weight: 600;
+}
+.nav-item .icn { width: 14px; height: 14px; opacity: 0.85; flex-shrink: 0; }
+
+.sidebar__foot {
+  margin-top: auto;
+  padding: 16px 24px;
+  border-top: var(--hair) solid var(--border);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px;
+}
+.sidebar__foot .avatar {
+  width: 32px; height: 32px;
+  background: var(--fg); color: var(--bg);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  display: grid; place-items: center;
+  letter-spacing: 0.02em;
+}
+.sidebar__foot .who { display: flex; flex-direction: column; line-height: 1.3; }
+.sidebar__foot .who strong { font-weight: 600; }
+.sidebar__foot .who span { color: var(--muted-fg); font-size: 11px; }
+
+/* ── Main content ──────────────────────────────────── */
+.main { display: flex; flex-direction: column; min-width: 0; }
+
+/* Top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 32px;
+  border-bottom: var(--hair) solid var(--border);
+  background: var(--bg);
+  position: sticky; top: 0; z-index: 5;
+}
+.topbar h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 28px;
+  letter-spacing: 0.02em;
+}
+.topbar .crumbs { color: var(--muted-fg); font-size: 12px; }
+.topbar .crumbs strong { color: var(--fg); font-weight: 500; }
+.topbar .grow { flex: 1; }
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 320px;
+  border: var(--hair) solid var(--border);
+  background: var(--card);
+  height: 36px;
+  padding: 0 12px;
+}
+.search input {
+  border: 0; outline: 0; background: transparent;
+  width: 100%; height: 100%;
+  font-size: 13px;
+}
+.search input::placeholder { color: var(--muted-fg); }
+.search .kbd {
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  color: var(--muted-fg);
+  border: var(--hair) solid var(--border);
+  padding: 1px 5px;
+  background: var(--bg);
+}
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 36px; padding: 0 16px;
+  background: var(--bg); color: var(--fg);
+  border: var(--hair) solid var(--border);
+  font-size: 13px; font-weight: 500;
+  transition: background 100ms;
+}
+.btn:hover { background: var(--secondary); }
+.btn--ghost { border-color: transparent; background: transparent; }
+.btn--ghost:hover { background: var(--secondary); }
+.btn--solid { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.btn--solid:hover { background: #000; }
+.btn--danger { color: var(--destructive); border-color: var(--border); }
+.btn--danger:hover { background: var(--destructive); color: var(--bg); border-color: var(--destructive); }
+.btn--sm { height: 28px; padding: 0 10px; font-size: 12px; }
+.btn--icon { width: 36px; padding: 0; justify-content: center; }
+
+/* ── Bento area ────────────────────────────────────── */
+.bento {
+  padding: 24px 32px 32px;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: minmax(120px, auto);
+  gap: var(--hair);
+  background: var(--border); /* hairline grid via gap */
+}
+.bento > section {
+  background: var(--card);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.card-title-row {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+.card-title-row h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  letter-spacing: 0.04em;
+}
+.card-title-row .actions { display: flex; gap: 8px; }
+
+/* Stat tiles */
+.stat { grid-column: span 3; }
+.stat .v {
+  font-family: var(--font-heading);
+  font-size: 72px;
+  line-height: 0.9;
+  margin-top: auto;
+}
+.stat .delta {
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  display: flex; align-items: center; gap: 6px;
+  margin-top: 8px;
+}
+.stat .delta .up   { color: #2d5a3e; }
+.stat .delta .down { color: var(--destructive); }
+.spark { margin-top: 12px; height: 36px; width: 100%; color: var(--fg); opacity: 0.55; }
+
+.tile-quick {
+  grid-column: span 3;
+  background: var(--fg) !important;
+  color: var(--bg);
+  cursor: pointer;
+  transition: background 120ms;
+}
+.tile-quick:hover { background: #000 !important; }
+.tile-quick h3 { color: var(--bg); }
+.tile-quick .plus {
+  font-family: var(--font-heading);
+  font-size: 64px;
+  margin-top: auto;
+  line-height: 1;
+}
+.tile-quick .sub {
+  color: rgba(232, 227, 211, 0.65);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+}
+
+/* Posts table */
+.posts { grid-column: span 9; }
+.toolbar {
+  display: flex; align-items: center; gap: 8px;
+  padding-bottom: 16px;
+  border-bottom: var(--hair) solid var(--border);
+  margin-bottom: 0;
+}
+.tab {
+  height: 32px;
+  padding: 0 12px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-fg);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -16px;
+  cursor: pointer;
+}
+.tab .pill {
+  font-size: 10px;
+  background: var(--secondary);
+  padding: 2px 6px;
+  letter-spacing: 0.06em;
+  color: var(--fg);
+}
+.tab.is-active {
+  color: var(--fg);
+  border-bottom-color: var(--fg);
+  font-weight: 600;
+}
+.tab-divider { width: 1px; height: 16px; background: var(--border); margin: 0 6px; }
+.tools-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  margin-top: 4px;
+}
+.table thead th {
+  text-align: left;
+  padding: 12px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted-fg);
+  border-bottom: var(--hair) solid var(--border);
+  background: transparent;
+}
+.table tbody td {
+  padding: 14px 8px;
+  border-bottom: var(--hair) solid var(--border);
+  vertical-align: middle;
+}
+.table tbody tr { transition: background 100ms; }
+.table tbody tr:hover { background: var(--secondary); }
+.table tbody tr.is-selected { background: var(--secondary); }
+.table tbody tr:last-child td { border-bottom: 0; }
+.table .col-check { width: 32px; }
+.table .col-title { width: auto; }
+.table .col-status { width: 110px; }
+.table .col-cat { width: 140px; }
+.table .col-author { width: 140px; }
+.table .col-date { width: 120px; }
+.table .col-views { width: 90px; text-align: right; font-variant-numeric: tabular-nums; }
+.table .col-actions { width: 72px; text-align: right; }
+
+.checkbox {
+  width: 14px; height: 14px;
+  border: var(--hair) solid var(--border);
+  background: var(--bg);
+  display: inline-grid; place-items: center;
+  cursor: pointer;
+}
+.checkbox.is-checked { background: var(--fg); border-color: var(--fg); }
+.checkbox.is-checked::after {
+  content: "";
+  width: 6px; height: 3px;
+  border-left: 1.5px solid var(--bg);
+  border-bottom: 1.5px solid var(--bg);
+  transform: rotate(-45deg) translate(0, -1px);
+}
+
+.title-cell { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.title-cell strong { font-weight: 600; color: var(--fg); }
+.title-cell .slug { color: var(--muted-fg); font-size: 11px; font-family: ui-monospace, Menlo, monospace; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  border: var(--hair) solid var(--border);
+  background: var(--bg);
+}
+.badge .dot { width: 6px; height: 6px; background: var(--muted-fg); }
+.badge--published { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+.badge--published .dot { background: #76c893; }
+.badge--draft { background: var(--bg); color: var(--fg); }
+.badge--draft .dot { background: var(--muted-fg); }
+.badge--scheduled { background: var(--secondary); color: var(--fg); border-color: var(--border); }
+.badge--scheduled .dot { background: #c9a227; }
+.badge--review { background: var(--bg); color: var(--fg); }
+.badge--review .dot { background: var(--destructive); }
+
+.author { display: inline-flex; align-items: center; gap: 8px; }
+.author .av {
+  width: 22px; height: 22px;
+  background: var(--secondary);
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 10px;
+  display: grid; place-items: center;
+  letter-spacing: 0.04em;
+  border: var(--hair) solid var(--border);
+}
+.author span { font-size: 12px; }
+
+.row-actions { display: inline-flex; gap: 4px; justify-content: flex-end; }
+.row-actions .btn--icon { width: 28px; height: 28px; }
+.row-actions .icn { width: 14px; height: 14px; }
+
+/* Pagination */
+.pager {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 16px;
+  font-size: 12px;
+  color: var(--muted-fg);
+}
+.pager .pages { display: flex; gap: 4px; }
+.pager .pages a {
+  width: 28px; height: 28px;
+  display: grid; place-items: center;
+  border: var(--hair) solid var(--border);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+.pager .pages a:hover { background: var(--secondary); }
+.pager .pages a.is-active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+/* Right column */
+.col-right { grid-column: span 3; display: contents; }
+
+.activity { grid-column: span 3; }
+.activity .item {
+  display: grid;
+  grid-template-columns: 14px 1fr auto;
+  gap: 10px;
+  padding: 12px 0;
+  border-bottom: var(--hair) solid var(--border);
+  font-size: 12px;
+  align-items: flex-start;
+}
+.activity .item:last-child { border-bottom: 0; }
+.activity .item .stem { position: relative; height: 100%; }
+.activity .item .stem::before {
+  content: ""; position: absolute; left: 6px; top: 4px; bottom: -12px;
+  width: 1px; background: var(--border);
+}
+.activity .item:last-child .stem::before { display: none; }
+.activity .item .stem .pip {
+  width: 9px; height: 9px;
+  background: var(--card);
+  border: var(--hair) solid var(--fg);
+  position: absolute; top: 4px; left: 2.5px;
+}
+.activity .item .stem .pip.dot { background: var(--fg); }
+.activity .item .stem .pip.red { background: var(--destructive); border-color: var(--destructive); }
+.activity .item .body strong { font-weight: 600; }
+.activity .item .body .ref { font-family: ui-monospace, Menlo, monospace; background: var(--secondary); padding: 1px 5px; font-size: 11px; }
+.activity .item time { color: var(--muted-fg); font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; }
+
+.media { grid-column: span 3; }
+.media__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: var(--hair);
+  background: var(--border);
+  border: var(--hair) solid var(--border);
+}
+.media__grid .cell {
+  aspect-ratio: 1/1;
+  background: var(--secondary);
+  position: relative;
+  overflow: hidden;
+}
+.media__grid .cell img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.media__grid .cell.more {
+  display: grid; place-items: center;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  color: var(--fg);
+}
+.media__foot {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 12px;
+  color: var(--muted-fg);
+  margin-top: 12px;
+}
+
+.schedule { grid-column: span 6; }
+.cal {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: var(--hair);
+  background: var(--border);
+  border: var(--hair) solid var(--border);
+}
+.cal .dow {
+  background: var(--card);
+  padding: 6px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-fg);
+}
+.cal .day {
+  background: var(--card);
+  padding: 8px;
+  min-height: 76px;
+  display: flex; flex-direction: column; gap: 4px;
+  font-size: 11px;
+  position: relative;
+}
+.cal .day .n { font-family: var(--font-heading); font-size: 16px; line-height: 1; color: var(--muted-fg); }
+.cal .day.today .n { color: var(--fg); }
+.cal .day.today::after {
+  content: ""; position: absolute; top: 6px; right: 6px;
+  width: 6px; height: 6px; background: var(--fg);
+}
+.cal .day.out { background: transparent; color: var(--muted-fg); }
+.cal .day.out .n { opacity: 0.4; }
+.cal .day .ev {
+  font-size: 10px;
+  padding: 2px 4px;
+  background: var(--secondary);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  border-left: 2px solid var(--fg);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cal .day .ev.pub { background: var(--fg); color: var(--bg); border-left-color: var(--bg); }
+.cal .day .ev.draft { border-left-color: var(--muted-fg); }
+
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border: var(--hair) solid var(--border);
+  background: var(--bg);
+  letter-spacing: 0.02em;
+}
+.tag .n { color: var(--muted-fg); margin-left: 4px; font-size: 10px; }
+
+/* Compose drawer */
+.drawer-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(26, 25, 24, 0.4);
+  display: none;
+  z-index: 50;
+}
+.drawer-backdrop.is-open { display: block; }
+.drawer {
+  position: fixed; top: 0; right: 0; height: 100vh;
+  width: 520px;
+  background: var(--card);
+  border-left: var(--hair) solid var(--border);
+  z-index: 51;
+  transform: translateX(100%);
+  transition: transform 240ms cubic-bezier(.4,0,.2,1);
+  display: flex; flex-direction: column;
+}
+.drawer.is-open { transform: translateX(0); }
+.drawer__head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 24px;
+  border-bottom: var(--hair) solid var(--border);
+}
+.drawer__head h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 26px;
+  letter-spacing: 0.02em;
+}
+.drawer__body {
+  flex: 1; overflow: auto;
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field label { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted-fg); }
+.field input, .field select, .field textarea {
+  background: var(--bg);
+  border: var(--hair) solid var(--border);
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: 0;
+}
+.field input:focus, .field select:focus, .field textarea:focus { border-color: var(--fg); }
+.field textarea { resize: vertical; min-height: 120px; font-family: inherit; line-height: 1.5; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.segment {
+  display: inline-flex;
+  border: var(--hair) solid var(--border);
+  background: var(--bg);
+}
+.segment button {
+  background: transparent; border: 0;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--muted-fg);
+  border-right: var(--hair) solid var(--border);
+}
+.segment button:last-child { border-right: 0; }
+.segment button.is-active { background: var(--fg); color: var(--bg); }
+.drawer__foot {
+  padding: 16px 24px;
+  border-top: var(--hair) solid var(--border);
+  display: flex; gap: 8px; align-items: center;
+}
+.drawer__foot .grow { flex: 1; color: var(--muted-fg); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; }
+
+/* Icons */
+.icn { display: inline-block; vertical-align: middle; }
+
+/* Selectable rows visual when bulk-bar shown */
+.bulk-bar {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--fg);
+  color: var(--bg);
+  padding: 10px 16px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.bulk-bar.is-on { display: flex; }
+.bulk-bar .grp { display: flex; gap: 8px; }
+.bulk-bar button {
+  background: transparent;
+  border: var(--hair) solid rgba(232,227,211,0.4);
+  color: var(--bg);
+  padding: 6px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+.bulk-bar button:hover { background: rgba(232,227,211,0.15); }
+.bulk-bar button.danger { color: #fca5a5; border-color: #7a1414; }
+.bulk-bar button.danger:hover { background: var(--destructive); color: var(--bg); border-color: var(--destructive); }
+
+</style>
+</head>
+<body>
+
+<div class="shell" data-screen-label="01 Admin Dashboard">
+
+  <!-- ───────── Sidebar ───────── -->
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <span class="mark">LUMINA</span>
+      <span class="v">v2.3</span>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group__title">Workspace</div>
+      <a class="nav-item is-active" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="5" height="5"/><rect x="8" y="1" width="5" height="5"/><rect x="1" y="8" width="5" height="5"/><rect x="8" y="8" width="5" height="5"/></svg>
+        Dashboard
+      </a>
+      <a class="nav-item" href="#posts">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="12" height="12"/><path d="M3 5h8M3 8h8M3 11h5"/></svg>
+        Posts <span class="count">42</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 1h7l3 3v9H2z"/><path d="M9 1v3h3"/></svg>
+        Drafts <span class="count">7</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="3" width="12" height="10"/><path d="M1 6h12M5 1v2M9 1v2"/></svg>
+        Schedule <span class="count">3</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="2" width="12" height="10"/><circle cx="4" cy="6" r="1.2" fill="currentColor" stroke="none"/><path d="M1 11l4-4 3 3 2-2 3 3"/></svg>
+        Media <span class="count">148</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group__title">Audience</div>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 6 7 1l5 5"/><path d="M3 6v7h8V6"/></svg>
+        Analytics
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="5" cy="5" r="3"/><path d="M1 13c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M9 5a3 3 0 0 1 0 6"/></svg>
+        Subscribers <span class="count">1,284</span>
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3h12v8H1z"/><path d="M1 3l6 5 6-5"/></svg>
+        Comments <span class="count">12</span>
+      </a>
+    </div>
+
+    <div class="nav-group">
+      <div class="nav-group__title">Settings</div>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="7" cy="7" r="2"/><path d="M7 1v2M7 11v2M1 7h2M11 7h2M2.6 2.6l1.4 1.4M10 10l1.4 1.4M2.6 11.4 4 10M10 4l1.4-1.4"/></svg>
+        Theme
+      </a>
+      <a class="nav-item" href="#">
+        <svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M11 3 3 11M3 3l8 8"/></svg>
+        Integrations
+      </a>
+    </div>
+
+    <div class="sidebar__foot">
+      <div class="avatar">B</div>
+      <div class="who">
+        <strong>Braulio</strong>
+        <span>Owner · Free Plan</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ───────── Main ───────── -->
+  <main class="main">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <div>
+        <h1>Dashboard</h1>
+        <div class="crumbs">Workspace / <strong>Dashboard</strong></div>
+      </div>
+      <div class="grow"></div>
+
+      <div class="search">
+        <svg class="icn" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="6" cy="6" r="4.5"/><path d="m13 13-3.5-3.5"/></svg>
+        <input id="searchInput" placeholder="Search posts, drafts, media…" style="margin-left:8px"/>
+        <span class="kbd">⌘ K</span>
+      </div>
+
+      <button class="btn btn--icon" title="Notifications">
+        <svg class="icn" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M7 1a4 4 0 0 0-4 4v3l-1 2h10l-1-2V5a4 4 0 0 0-4-4z"/><path d="M5.5 11.5a1.5 1.5 0 0 0 3 0"/></svg>
+      </button>
+      <button class="btn">
+        <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 5h6M6 1v8M3 9l3 3 3-3"/></svg>
+        Import
+      </button>
+      <button class="btn btn--solid" id="newPostBtn">
+        <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 1v10M1 6h10"/></svg>
+        New Post
+      </button>
+    </header>
+
+    <!-- Bento -->
+    <section class="bento">
+
+      <!-- Stats row -->
+      <section class="stat">
+        <div class="card-title-row">
+          <h3>Drafts</h3>
+          <span class="eyebrow">7 days</span>
+        </div>
+        <div class="v">07</div>
+        <div class="delta"><span class="up">▲ 2</span> from last week</div>
+        <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none">
+          <polyline fill="none" stroke="currentColor" stroke-width="1.2" points="0,28 12,24 24,26 36,18 48,22 60,14 72,16 84,10 96,12 108,6 120,8"/>
+        </svg>
+      </section>
+
+      <section class="stat">
+        <div class="card-title-row">
+          <h3>Published</h3>
+          <span class="eyebrow">All time</span>
+        </div>
+        <div class="v">35</div>
+        <div class="delta"><span class="up">▲ 4</span> this month</div>
+        <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none">
+          <polyline fill="none" stroke="currentColor" stroke-width="1.2" points="0,30 12,28 24,24 36,26 48,18 60,16 72,12 84,14 96,8 108,10 120,4"/>
+        </svg>
+      </section>
+
+      <section class="stat">
+        <div class="card-title-row">
+          <h3>Views</h3>
+          <span class="eyebrow">30 days</span>
+        </div>
+        <div class="v">12,408</div>
+        <div class="delta"><span class="up">▲ 18%</span> vs. prior</div>
+        <svg class="spark" viewBox="0 0 120 36" preserveAspectRatio="none">
+          <polyline fill="none" stroke="currentColor" stroke-width="1.2" points="0,24 12,22 24,18 36,20 48,12 60,18 72,8 84,14 96,6 108,12 120,4"/>
+        </svg>
+      </section>
+
+      <!-- Quick compose (dark) -->
+      <section class="tile-quick" id="quickComposeTile">
+        <div class="card-title-row">
+          <h3>Quick Compose</h3>
+          <span class="eyebrow" style="color: rgba(232,227,211,0.6);">⌘ N</span>
+        </div>
+        <div class="sub">Start a draft. Title-only. Expands in a side drawer.</div>
+        <div class="plus">+</div>
+      </section>
+
+      <!-- Posts table (large) -->
+      <section class="posts">
+        <div class="card-title-row">
+          <h3>Posts</h3>
+          <div class="actions">
+            <button class="btn btn--sm">
+              <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3h10M3 6h6M5 9h2"/></svg>
+              Filter
+            </button>
+            <button class="btn btn--sm">
+              <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M2 4h8M4 6h4M6 8h0"/></svg>
+              Sort: Newest
+            </button>
+            <button class="btn btn--sm btn--icon" title="Export">
+              <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 1v8M3 6l3 3 3-3M1 11h10"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="toolbar">
+          <button class="tab is-active" data-tab="all">All <span class="pill">42</span></button>
+          <button class="tab" data-tab="published">Published <span class="pill">35</span></button>
+          <button class="tab" data-tab="draft">Drafts <span class="pill">7</span></button>
+          <button class="tab" data-tab="scheduled">Scheduled <span class="pill">3</span></button>
+          <button class="tab" data-tab="review">In Review <span class="pill">2</span></button>
+          <div class="tab-divider"></div>
+          <button class="tab" data-tab="trash">Trash</button>
+          <div class="tools-right">
+            <span class="eyebrow">View</span>
+            <div class="segment" role="tablist" aria-label="Layout">
+              <button class="is-active" title="List view">
+                <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 3h10M1 6h10M1 9h10"/></svg>
+              </button>
+              <button title="Grid view">
+                <svg class="icn" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="1" width="4" height="4"/><rect x="7" y="1" width="4" height="4"/><rect x="1" y="7" width="4" height="4"/><rect x="7" y="7" width="4" height="4"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bulk-bar" id="bulkBar">
+          <div><strong id="bulkCount">0</strong> selected</div>
+          <div class="grp">
+            <button>Publish</button>
+            <button>Move to Drafts</button>
+            <button>Add Tag…</button>
+            <button class="danger">Delete</button>
+          </div>
+        </div>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th class="col-check">
+                <div class="checkbox" id="masterCheck" aria-label="Select all"></div>
+              </th>
+              <th class="col-title">Title</th>
+              <th class="col-status">Status</th>
+              <th class="col-cat">Category</th>
+              <th class="col-author">Author</th>
+              <th class="col-date">Updated</th>
+              <th class="col-views">Views</th>
+              <th class="col-actions"></th>
+            </tr>
+          </thead>
+          <tbody id="postsBody">
+            <!-- rows injected by JS -->
+          </tbody>
+        </table>
+
+        <div class="pager">
+          <span>Showing 1–8 of 42 entries</span>
+          <div class="pages">
+            <a class="is-active">1</a>
+            <a>2</a>
+            <a>3</a>
+            <a>4</a>
+            <a>5</a>
+            <a>→</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Activity -->
+      <section class="activity">
+        <div class="card-title-row">
+          <h3>Activity</h3>
+          <a class="eyebrow" href="#">All →</a>
+        </div>
+
+        <div class="item">
+          <div class="stem"><div class="pip dot"></div></div>
+          <div class="body"><strong>You</strong> published <span class="ref">the-brutalist-resurgence</span><div class="eyebrow" style="margin-top:4px;color:var(--muted-fg)">v4 · 2,847 chars</div></div>
+          <time>12:42 PM</time>
+        </div>
+        <div class="item">
+          <div class="stem"><div class="pip"></div></div>
+          <div class="body"><strong>Elara</strong> left a comment on <span class="ref">negative-space</span></div>
+          <time>11:08 AM</time>
+        </div>
+        <div class="item">
+          <div class="stem"><div class="pip dot"></div></div>
+          <div class="body"><strong>You</strong> saved a draft <span class="ref">a-bench-in-vila-real</span></div>
+          <time>Yesterday</time>
+        </div>
+        <div class="item">
+          <div class="stem"><div class="pip red"></div></div>
+          <div class="body"><strong>Auto-archive</strong> moved 2 posts to trash</div>
+          <time>2 days ago</time>
+        </div>
+        <div class="item">
+          <div class="stem"><div class="pip"></div></div>
+          <div class="body"><strong>Editor</strong> scheduled <span class="ref">grid-systems</span> for May 18 09:00</div>
+          <time>3 days ago</time>
+        </div>
+        <div class="item">
+          <div class="stem"><div class="pip"></div></div>
+          <div class="body"><strong>System</strong> ran weekly digest · 1,284 subscribers</div>
+          <time>1 week ago</time>
+        </div>
+      </section>
+
+      <!-- Schedule calendar -->
+      <section class="schedule">
+        <div class="card-title-row">
+          <h3>Schedule — May 2026</h3>
+          <div class="actions">
+            <button class="btn btn--sm btn--icon">‹</button>
+            <button class="btn btn--sm">Today</button>
+            <button class="btn btn--sm btn--icon">›</button>
+          </div>
+        </div>
+        <div class="cal" id="cal"></div>
+        <div style="display:flex;gap:16px;margin-top:12px;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted-fg);">
+          <span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;background:var(--fg);"></span>Published</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;background:var(--secondary);border-left:2px solid var(--fg);"></span>Scheduled</span>
+          <span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:10px;height:10px;background:var(--secondary);border-left:2px solid var(--muted-fg);"></span>Draft</span>
+        </div>
+      </section>
+
+      <!-- Media -->
+      <section class="media">
+        <div class="card-title-row">
+          <h3>Media Library</h3>
+          <a class="eyebrow" href="#">Browse →</a>
+        </div>
+        <div class="media__grid">
+          <div class="cell"><img src="assets/feature-monolith.png" alt=""/></div>
+          <div class="cell"><img src="assets/post-hero.png" alt=""/></div>
+          <div class="cell"><img src="assets/shadows.png" alt=""/></div>
+          <div class="cell"><img src="assets/post-detail-1.png" alt=""/></div>
+          <div class="cell"><img src="assets/post-detail-2.png" alt=""/></div>
+          <div class="cell more">+143</div>
+        </div>
+        <div class="media__foot">
+          <span>148 assets · 412 MB used</span>
+          <span>2 GB limit</span>
+        </div>
+      </section>
+
+      <!-- Tags -->
+      <section class="activity" style="grid-column: span 3;">
+        <div class="card-title-row">
+          <h3>Tags &amp; Categories</h3>
+          <a class="eyebrow" href="#">Manage →</a>
+        </div>
+        <div class="tags">
+          <span class="tag">Architecture <span class="n">14</span></span>
+          <span class="tag">Brutalism <span class="n">9</span></span>
+          <span class="tag">Field Notes <span class="n">7</span></span>
+          <span class="tag">Materials <span class="n">6</span></span>
+          <span class="tag">Light <span class="n">5</span></span>
+          <span class="tag">Interiors <span class="n">4</span></span>
+          <span class="tag">Systems <span class="n">3</span></span>
+          <span class="tag">Travel <span class="n">2</span></span>
+          <span class="tag">Photography <span class="n">2</span></span>
+        </div>
+        <div style="margin-top:auto;padding-top:16px;border-top:var(--hair) solid var(--border);display:flex;gap:8px;align-items:center;">
+          <input placeholder="New tag…" style="flex:1;background:var(--bg);border:var(--hair) solid var(--border);padding:8px 10px;font-size:12px;outline:0;"/>
+          <button class="btn btn--sm btn--solid">Add</button>
+        </div>
+      </section>
+
+    </section>
+
+  </main>
+</div>
+
+<!-- ───── Compose Drawer ───── -->
+<div class="drawer-backdrop" id="drawerBackdrop"></div>
+<aside class="drawer" id="composeDrawer" aria-hidden="true">
+  <div class="drawer__head">
+    <h2>New Post</h2>
+    <button class="btn btn--icon btn--ghost" id="drawerClose" aria-label="Close">
+      <svg class="icn" width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 2l10 10M12 2 2 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer__body">
+    <div class="field">
+      <label>Headline</label>
+      <input id="dTitle" placeholder="Enter a headline…" />
+    </div>
+    <div class="field">
+      <label>Slug</label>
+      <input id="dSlug" placeholder="/auto-generated-from-title" />
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>Category</label>
+        <select>
+          <option>Architecture</option>
+          <option>Field Notes</option>
+          <option>Materials</option>
+          <option>Light Studies</option>
+          <option>Systems</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Issue</label>
+        <select>
+          <option>No. 04 (current)</option>
+          <option>No. 05 (next)</option>
+          <option>Unscheduled</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Standfirst / Dek</label>
+      <textarea placeholder="A short paragraph that introduces the piece. Plain prose — no formatting."></textarea>
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <div class="segment" role="radiogroup">
+        <button class="is-active" type="button">Draft</button>
+        <button type="button">In Review</button>
+        <button type="button">Schedule</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Tags</label>
+      <div class="tags">
+        <span class="tag">Architecture ✕</span>
+        <span class="tag">Brutalism ✕</span>
+        <span class="tag" style="border-style:dashed;color:var(--muted-fg);">+ Add tag</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Cover image</label>
+      <div style="border:var(--hair) dashed var(--border);background:var(--bg);padding:32px;text-align:center;font-size:12px;color:var(--muted-fg);letter-spacing:0.06em;text-transform:uppercase;">
+        Drop image here · or click to browse
+      </div>
+    </div>
+  </div>
+  <div class="drawer__foot">
+    <span class="grow">Autosave · just now</span>
+    <button class="btn" id="drawerCancel">Cancel</button>
+    <button class="btn btn--solid">Open in Editor →</button>
+  </div>
+</aside>
+
+<script>
+// ── Seed posts data ───────────────────────────────────
+const POSTS = [
+  { title: "The Brutalist Resurgence",         slug: "the-brutalist-resurgence",     status: "published", cat: "Architecture",  author: "Braulio", date: "Today",     views: 1284, sel: false },
+  { title: "Negative Space as Structure",      slug: "negative-space-as-structure",  status: "published", cat: "Interiors",     author: "Braulio", date: "Oct 09",    views:  842, sel: false },
+  { title: "Grid Systems in Physical Space",   slug: "grid-systems-physical-space",  status: "scheduled", cat: "Systems",       author: "Elara V.", date: "May 18",   views:    0, sel: false },
+  { title: "The Weight of Shadows",            slug: "the-weight-of-shadows",        status: "published", cat: "Light Studies", author: "Braulio", date: "Oct 02",    views:  617, sel: false },
+  { title: "Aesthetics of Utility",            slug: "aesthetics-of-utility",        status: "published", cat: "Materials",     author: "Braulio", date: "Sep 18",    views:  504, sel: false },
+  { title: "A Bench in Vila Real",             slug: "a-bench-in-vila-real",         status: "draft",     cat: "Field Notes",   author: "Braulio", date: "Yesterday", views:    0, sel: false },
+  { title: "Concrete Doesn't Photograph",      slug: "concrete-doesnt-photograph",   status: "review",    cat: "Photography",   author: "Marco R.", date: "2 days",   views:    0, sel: false },
+  { title: "Six Notes on the Stairwell",       slug: "six-notes-on-the-stairwell",   status: "draft",     cat: "Field Notes",   author: "Braulio", date: "3 days",    views:    0, sel: false },
+];
+
+const STATUSES = {
+  published: { cls: "badge--published", label: "Published" },
+  draft:     { cls: "badge--draft",     label: "Draft" },
+  scheduled: { cls: "badge--scheduled", label: "Scheduled" },
+  review:    { cls: "badge--review",    label: "In Review" },
+};
+
+function initials(name) {
+  return name.split(/\s+/).map(s => s[0]).join("").slice(0, 2).toUpperCase();
+}
+
+function renderPosts(filterTab, query) {
+  const body = document.getElementById("postsBody");
+  body.innerHTML = "";
+  const q = (query || "").trim().toLowerCase();
+  POSTS.filter(p => {
+    if (filterTab && filterTab !== "all" && filterTab !== "trash" && p.status !== filterTab) return false;
+    if (q && !(p.title.toLowerCase().includes(q) || p.slug.includes(q) || p.cat.toLowerCase().includes(q))) return false;
+    return true;
+  }).forEach((p, i) => {
+    const st = STATUSES[p.status];
+    const tr = document.createElement("tr");
+    tr.dataset.idx = i;
+    if (p.sel) tr.classList.add("is-selected");
+    tr.innerHTML = `
+      <td class="col-check">
+        <div class="checkbox ${p.sel ? "is-checked" : ""}" data-action="check"></div>
+      </td>
+      <td class="col-title">
+        <div class="title-cell">
+          <strong>${p.title}</strong>
+          <span class="slug">/${p.slug}</span>
+        </div>
+      </td>
+      <td class="col-status"><span class="badge ${st.cls}"><span class="dot"></span>${st.label}</span></td>
+      <td class="col-cat">${p.cat}</td>
+      <td class="col-author"><span class="author"><span class="av">${initials(p.author)}</span><span>${p.author}</span></span></td>
+      <td class="col-date">${p.date}</td>
+      <td class="col-views">${p.views ? p.views.toLocaleString() : "—"}</td>
+      <td class="col-actions">
+        <div class="row-actions">
+          <button class="btn btn--icon btn--ghost btn--sm" title="Edit"><svg class="icn" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 1l4 4-8 8H1V9z"/></svg></button>
+          <button class="btn btn--icon btn--ghost btn--sm" title="More"><svg class="icn" viewBox="0 0 14 14" fill="currentColor"><circle cx="3" cy="7" r="1.2"/><circle cx="7" cy="7" r="1.2"/><circle cx="11" cy="7" r="1.2"/></svg></button>
+        </div>
+      </td>
+    `;
+    body.appendChild(tr);
+  });
+
+  // wire row checks
+  body.querySelectorAll("[data-action=check]").forEach((cb, i) => {
+    cb.addEventListener("click", e => {
+      e.stopPropagation();
+      const row = cb.closest("tr");
+      const idx = parseInt(row.dataset.idx, 10);
+      POSTS[idx].sel = !POSTS[idx].sel;
+      cb.classList.toggle("is-checked", POSTS[idx].sel);
+      row.classList.toggle("is-selected", POSTS[idx].sel);
+      updateBulk();
+    });
+  });
+
+  // click row to select
+  body.querySelectorAll("tr").forEach(tr => {
+    tr.addEventListener("click", e => {
+      if (e.target.closest("button")) return;
+      tr.querySelector("[data-action=check]").click();
+    });
+  });
+}
+
+function updateBulk() {
+  const n = POSTS.filter(p => p.sel).length;
+  document.getElementById("bulkCount").textContent = n;
+  document.getElementById("bulkBar").classList.toggle("is-on", n > 0);
+  // master check state
+  const master = document.getElementById("masterCheck");
+  master.classList.toggle("is-checked", n > 0 && n === POSTS.length);
+}
+
+// ── Tabs ───────────────────────────────────────────────
+document.querySelectorAll(".tab").forEach(t => {
+  t.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.classList.remove("is-active"));
+    t.classList.add("is-active");
+    renderPosts(t.dataset.tab, document.getElementById("searchInput").value);
+  });
+});
+
+// ── Master check ───────────────────────────────────────
+document.getElementById("masterCheck").addEventListener("click", () => {
+  const allSel = POSTS.every(p => p.sel);
+  POSTS.forEach(p => p.sel = !allSel);
+  const active = document.querySelector(".tab.is-active").dataset.tab;
+  renderPosts(active, document.getElementById("searchInput").value);
+  updateBulk();
+});
+
+// ── Search ─────────────────────────────────────────────
+document.getElementById("searchInput").addEventListener("input", (e) => {
+  const active = document.querySelector(".tab.is-active").dataset.tab;
+  renderPosts(active, e.target.value);
+});
+
+// ── Compose drawer ─────────────────────────────────────
+const drawer = document.getElementById("composeDrawer");
+const backdrop = document.getElementById("drawerBackdrop");
+function openDrawer() {
+  drawer.classList.add("is-open");
+  backdrop.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  setTimeout(() => document.getElementById("dTitle").focus(), 200);
+}
+function closeDrawer() {
+  drawer.classList.remove("is-open");
+  backdrop.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+}
+document.getElementById("newPostBtn").addEventListener("click", openDrawer);
+document.getElementById("quickComposeTile").addEventListener("click", openDrawer);
+document.getElementById("drawerClose").addEventListener("click", closeDrawer);
+document.getElementById("drawerCancel").addEventListener("click", closeDrawer);
+backdrop.addEventListener("click", closeDrawer);
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape") closeDrawer();
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "n") { e.preventDefault(); openDrawer(); }
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); document.getElementById("searchInput").focus(); }
+});
+
+// Auto-slug
+document.getElementById("dTitle").addEventListener("input", e => {
+  const slug = e.target.value.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  document.getElementById("dSlug").placeholder = slug ? "/" + slug : "/auto-generated-from-title";
+});
+
+// Drawer status segment
+drawer.querySelectorAll(".segment button").forEach(b => {
+  b.addEventListener("click", () => {
+    b.parentElement.querySelectorAll("button").forEach(x => x.classList.remove("is-active"));
+    b.classList.add("is-active");
+  });
+});
+
+// ── Calendar (May 2026) ───────────────────────────────
+function renderCal() {
+  const cal = document.getElementById("cal");
+  const dow = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+  dow.forEach(d => {
+    const el = document.createElement("div"); el.className = "dow"; el.textContent = d; cal.appendChild(el);
+  });
+  // May 2026 starts on Friday
+  // We'll render 5 weeks starting from Mon Apr 27
+  const days = [
+    [27,"out"],[28,"out"],[29,"out"],[30,"out"],[1,""],[2,""],[3,""],
+    [4,""],[5,""],[6,"",[{c:"pub",t:"Brutalist Resurgence"}]],[7,""],[8,""],[9,""],[10,""],
+    [11,""],[12,""],[13,"today",[{c:"draft",t:"Vila Real"}]],[14,""],[15,""],[16,""],[17,""],
+    [18,"",[{c:"ev",t:"Grid Systems · 09:00"}]],[19,""],[20,"",[{c:"draft",t:"Six Notes"}]],[21,""],[22,""],[23,""],[24,""],
+    [25,"",[{c:"ev",t:"Concrete Photograph"}]],[26,""],[27,""],[28,""],[29,""],[30,""],[31,""]
+  ];
+  days.forEach(([n, cls, evs]) => {
+    const el = document.createElement("div");
+    el.className = "day " + (cls || "");
+    el.innerHTML = `<div class="n">${String(n).padStart(2,"0")}</div>` +
+      (evs ? evs.map(e => `<div class="ev ${e.c}">${e.t}</div>`).join("") : "");
+    cal.appendChild(el);
+  });
+}
+renderCal();
+
+// initial render
+renderPosts("all", "");
+updateBulk();
+</script>
+
+</body>
+</html>
