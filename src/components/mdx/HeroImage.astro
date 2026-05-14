@@ -1,0 +1,5 @@
+---
+// Stub — full implementation in Task 5
+const { src, caption, credit } = Astro.props;
+---
+<figure><img src={src} alt={caption ?? ''} />{caption && <figcaption>{caption}{credit ? ` · ${credit}` : ''}</figcaption>}</figure>

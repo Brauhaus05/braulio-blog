@@ -1,0 +1,8 @@
+---
+// Stub — full implementation in Task 5
+const { left, leftCaption, right, rightCaption } = Astro.props;
+---
+<div>
+  <figure><img src={left} alt={leftCaption ?? ''} />{leftCaption && <figcaption>{leftCaption}</figcaption>}</figure>
+  <figure><img src={right} alt={rightCaption ?? ''} />{rightCaption && <figcaption>{rightCaption}</figcaption>}</figure>
+</div>
