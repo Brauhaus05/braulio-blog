@@ -1,0 +1,57 @@
+---
+import { getCollection } from 'astro:content';
+import AdminShell from '../../components/layout/AdminShell.astro';
+import StatCard from '../../components/admin/StatCard.astro';
+import PostsTable from '../../components/admin/PostsTable.astro';
+import ActivityFeed from '../../components/admin/ActivityFeed.astro';
+import { getPublishedPosts } from '../../lib/posts';
+
+const allPosts = await getCollection('posts');
+const published = getPublishedPosts(allPosts);
+const drafts = allPosts.filter(p => p.data.draft);
+const totalReadTime = published.reduce((sum, p) => sum + p.data.readTime, 0);
+
+const buildDate = new Date().toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric',
+});
+---
+<AdminShell title="Dashboard">
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="sidebar__brand">
+        <span class="mark">LUMINA</span>
+        <span class="v">blog</span>
+      </div>
+      <div class="nav-group">
+        <div class="nav-group__title">Content</div>
+        <a class="nav-item is-active" href="#">Dashboard</a>
+        <a class="nav-item" href="#">Posts <span class="count">{published.length}</span></a>
+        <a class="nav-item" href="#">Drafts <span class="count">{drafts.length}</span></a>
+      </div>
+      <div class="sidebar__foot">
+        <div class="avatar">B</div>
+        <div class="who">
+          <strong>Braulio</strong>
+          <span>Owner</span>
+        </div>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Dashboard</h1>
+          <div class="crumbs">Workspace / <strong>Dashboard</strong></div>
+        </div>
+        <div class="grow"></div>
+        <span class="eyebrow">Read-only &middot; Built {buildDate}</span>
+      </header>
+      <section class="bento">
+        <StatCard label="Published" value={published.length} sub="All time" />
+        <StatCard label="Drafts" value={drafts.length} sub="Unpublished" />
+        <StatCard label="Read time" value={`${totalReadTime} min`} sub="Total published" />
+        <PostsTable posts={allPosts} />
+        <ActivityFeed posts={allPosts} />
+      </section>
+    </main>
+  </div>
+</AdminShell>

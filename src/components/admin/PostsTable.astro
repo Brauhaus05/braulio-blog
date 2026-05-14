@@ -1,0 +1,51 @@
+---
+import type { PostEntry } from '../../lib/posts';
+
+interface Props {
+  posts: PostEntry[];
+}
+const { posts } = Astro.props;
+const sorted = [...posts].sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+---
+<section class="posts" style="grid-column: span 9;">
+  <div class="card-title-row">
+    <h3>Posts</h3>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th class="col-title">Title</th>
+        <th class="col-status">Status</th>
+        <th class="col-cat">Category</th>
+        <th class="col-date">Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      {sorted.map(post => {
+        const date = post.data.date.toLocaleDateString('en-GB', {
+          day: 'numeric', month: 'short', year: 'numeric',
+        });
+        const badgeClass = post.data.draft ? 'badge--draft' : 'badge--published';
+        const badgeLabel = post.data.draft ? 'Draft' : 'Published';
+        return (
+          <tr>
+            <td class="col-title">
+              <div class="title-cell">
+                <strong>{post.data.title}</strong>
+                <span class="slug">/{post.slug}</span>
+              </div>
+            </td>
+            <td class="col-status">
+              <span class={`badge ${badgeClass}`}>
+                <span class="dot"></span>
+                {badgeLabel}
+              </span>
+            </td>
+            <td class="col-cat">{post.data.category}</td>
+            <td class="col-date">{date}</td>
+          </tr>
+        );
+      })}
+    </tbody>
+  </table>
+</section>
