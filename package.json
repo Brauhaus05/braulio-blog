@@ -11,10 +11,11 @@
     "test:watch": "vitest"
   },
   "dependencies": {
-    "astro": "^5.0.0",
-    "@astrojs/mdx": "^4.0.0"
+    "@astrojs/mdx": "^4.0.0",
+    "astro": "^5.0.0"
   },
   "devDependencies": {
+    "@astrojs/check": "^0.9.9",
     "typescript": "^5.0.0",
     "vitest": "^3.0.0",
     "zod": "^3.22.0"
