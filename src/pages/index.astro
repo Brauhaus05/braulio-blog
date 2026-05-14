@@ -1,9 +1,41 @@
 ---
+import '../styles/home.css';
+import { getCollection } from 'astro:content';
 import PageShell from '../components/layout/PageShell.astro';
 import SiteHeader from '../components/layout/SiteHeader.astro';
 import SiteFooter from '../components/layout/SiteFooter.astro';
+import Hero from '../components/home/Hero.astro';
+import Marquee from '../components/home/Marquee.astro';
+import FeaturedPost from '../components/home/FeaturedPost.astro';
+import ArticleCard from '../components/home/ArticleCard.astro';
+import NewsletterSignup from '../components/home/NewsletterSignup.astro';
+import CategoryIndex from '../components/home/CategoryIndex.astro';
+import { getPublishedPosts, getFeaturedPost } from '../lib/posts';
+
+const allPosts = await getCollection('posts');
+const published = getPublishedPosts(allPosts);
+const featured = getFeaturedPost(allPosts);
+const gridPosts = published.filter(p => p.slug !== featured?.slug).slice(0, 6);
+
+const col1 = gridPosts.filter((_, i) => i % 2 === 0);
+const col2 = gridPosts.filter((_, i) => i % 2 === 1);
 ---
 <PageShell title="Journal">
   <SiteHeader />
+  <Hero />
+  <Marquee />
+  {featured && <FeaturedPost post={featured} />}
+  <section class="grid-3">
+    <div class="col">
+      {col1.map((post, i) => <ArticleCard post={post} index={i * 2} />)}
+    </div>
+    <div class="col">
+      {col2.map((post, i) => <ArticleCard post={post} index={i * 2 + 1} />)}
+    </div>
+    <aside class="col sidebar">
+      <NewsletterSignup />
+      <CategoryIndex posts={allPosts} />
+    </aside>
+  </section>
   <SiteFooter />
 </PageShell>
