@@ -1,5 +1,10 @@
 ---
-// Stub — full implementation in Task 5
+interface Props {
+  cite?: string;
+}
 const { cite } = Astro.props;
 ---
-<blockquote cite={cite}><slot /></blockquote>
+<blockquote>
+  <slot />
+  {cite && <cite>— {cite}</cite>}
+</blockquote>

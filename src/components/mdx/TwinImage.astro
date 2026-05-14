@@ -1,8 +1,17 @@
 ---
-// Stub — full implementation in Task 5
+interface Props {
+  left: string;
+  leftCaption: string;
+  right: string;
+  rightCaption: string;
+}
 const { left, leftCaption, right, rightCaption } = Astro.props;
 ---
-<div>
-  <figure><img src={left} alt={leftCaption ?? ''} />{leftCaption && <figcaption>{leftCaption}</figcaption>}</figure>
-  <figure><img src={right} alt={rightCaption ?? ''} />{rightCaption && <figcaption>{rightCaption}</figcaption>}</figure>
+<div class="twin-img">
+  <div style={`background-image: url('${left}');`}></div>
+  <div style={`background-image: url('${right}');`}></div>
+</div>
+<div class="figure-row">
+  <span>{leftCaption}</span>
+  <span>{rightCaption}</span>
 </div>

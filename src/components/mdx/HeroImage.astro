@@ -1,5 +1,14 @@
 ---
-// Stub — full implementation in Task 5
+interface Props {
+  src: string;
+  caption: string;
+  credit?: string;
+}
 const { src, caption, credit } = Astro.props;
 ---
-<figure><img src={src} alt={caption ?? ''} />{caption && <figcaption>{caption}{credit ? ` · ${credit}` : ''}</figcaption>}</figure>
+<div class="hero-img" style={`background-image: url('${src}');`}>
+  <div class="hero-img__cap">
+    <span>{caption}</span>
+    {credit && <span>{credit}</span>}
+  </div>
+</div>
