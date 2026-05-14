@@ -1,0 +1,52 @@
+---
+import '../styles/home.css';
+import { getCollection } from 'astro:content';
+import PageShell from '../components/layout/PageShell.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+import { getPublishedPosts, groupByCategory } from '../lib/posts';
+
+const allPosts = await getCollection('posts');
+const published = getPublishedPosts(allPosts);
+const grouped = groupByCategory(published);
+const categories = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<PageShell title="Archive" description="All entries from Braulio's Journal, sorted by category.">
+  <SiteHeader />
+  <section class="home-hero">
+    <h1>Archive</h1>
+    <p class="home-hero__sub">{published.length} {published.length === 1 ? 'entry' : 'entries'} &mdash; sorted by category.</p>
+  </section>
+
+  {categories.map(([name, posts]) => (
+    <section>
+      <div class="index__title" style="padding: 24px var(--pad-x) 16px; border-bottom: 1px solid var(--line);">
+        {name}
+        <span style="opacity: 0.45; font-size: 10px; letter-spacing: 0.1em; margin-left: 16px; text-transform: uppercase;">
+          {posts.length} {posts.length === 1 ? 'entry' : 'entries'}
+        </span>
+      </div>
+      <div style="padding: 0 var(--pad-x);">
+        {posts.map(post => {
+          const date = post.data.date.toLocaleDateString('en-GB', {
+            day: 'numeric', month: 'short', year: 'numeric',
+          });
+          return (
+            <a
+              href={`${base}/posts/${post.slug}`}
+              class="index__list"
+              style="display: grid; grid-template-columns: 1fr auto auto; align-items: baseline; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit;"
+            >
+              <span style="font-family: 'Anton', sans-serif; font-size: 32px; letter-spacing: -0.01em; text-transform: uppercase;">{post.data.title}</span>
+              <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 32px; opacity: 0.55;">{post.data.category}</span>
+              <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">{date}</span>
+            </a>
+          );
+        })}
+      </div>
+    </section>
+  ))}
+
+  <SiteFooter />
+</PageShell>

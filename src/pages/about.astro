@@ -1,0 +1,47 @@
+---
+import '../styles/post.css';
+import PageShell from '../components/layout/PageShell.astro';
+import SiteHeader from '../components/layout/SiteHeader.astro';
+import SiteFooter from '../components/layout/SiteFooter.astro';
+---
+<PageShell title="About" description="About Braulio's Journal — a working notebook on architecture, design, and the structural honesty of everyday objects.">
+  <SiteHeader />
+  <div class="post-wrap">
+    <aside class="post-sidebar">
+      <div class="meta-block">
+        <div class="meta-row">
+          <span class="meta-row__label">Author</span>
+          <span class="meta-row__value">Braulio</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-row__label">Est.</span>
+          <span class="meta-row__value">2023</span>
+        </div>
+        <div class="meta-row">
+          <span class="meta-row__label">Frequency</span>
+          <span class="meta-row__value">Weekly</span>
+        </div>
+      </div>
+    </aside>
+    <article class="post-body">
+      <h1 class="post-title">About</h1>
+      <p class="post-deck">
+        A working notebook on architecture, brutalist design, and the structural honesty of everyday objects.
+      </p>
+      <p>
+        This journal is a place to think out loud about buildings, materials, grids, and the quiet rituals
+        that structure a working day. It is written by Braulio &mdash; designer, occasional walker of stairwells,
+        and close reader of concrete.
+      </p>
+      <p>
+        Posts appear weekly, more or less. The newsletter edition goes out bi-weekly to subscribers.
+      </p>
+      <h2 id="colophon"><span class="num">I.</span>Colophon</h2>
+      <p>
+        Built with <a href="https://astro.build">Astro</a>. Type set in Anton and Montserrat.
+        Hosted on Hostinger.
+      </p>
+    </article>
+  </div>
+  <SiteFooter />
+</PageShell>
