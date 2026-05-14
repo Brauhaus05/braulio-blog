@@ -276,3 +276,46 @@
     from { transform: translateX(0); }
     to { transform: translateX(-50%); }
   }
+
+  /* Archive page */
+  .archive-section { }
+
+  .archive-row {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: baseline;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: inherit;
+  }
+  .archive-row:hover { background: transparent; }
+
+  .archive-row__title {
+    font-family: "Anton", sans-serif;
+    font-size: 32px;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  .archive-row__cat {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-right: 32px;
+    opacity: 0.55;
+  }
+
+  .archive-row__date {
+    font-family: "Montserrat", sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .archive-category-list {
+    padding: 0 var(--pad-x);
+  }

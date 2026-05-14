@@ -27,20 +27,16 @@ const base = import.meta.env.BASE_URL.replace(/\/$/, '');
           {posts.length} {posts.length === 1 ? 'entry' : 'entries'}
         </span>
       </div>
-      <div style="padding: 0 var(--pad-x);">
+      <div class="archive-category-list">
         {posts.map(post => {
           const date = post.data.date.toLocaleDateString('en-GB', {
             day: 'numeric', month: 'short', year: 'numeric',
           });
           return (
-            <a
-              href={`${base}/posts/${post.slug}`}
-              class="index__list"
-              style="display: grid; grid-template-columns: 1fr auto auto; align-items: baseline; padding: 20px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit;"
-            >
-              <span style="font-family: 'Anton', sans-serif; font-size: 32px; letter-spacing: -0.01em; text-transform: uppercase;">{post.data.title}</span>
-              <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-right: 32px; opacity: 0.55;">{post.data.category}</span>
-              <span style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;">{date}</span>
+            <a href={`${base}/posts/${post.slug}`} class="archive-row">
+              <span class="archive-row__title">{post.data.title}</span>
+              <span class="archive-row__cat">{post.data.category}</span>
+              <span class="archive-row__date">{date}</span>
             </a>
           );
         })}
