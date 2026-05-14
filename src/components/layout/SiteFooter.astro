@@ -1,0 +1,12 @@
+---
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+---
+<footer class="site-footer">
+  <div class="foot-mark" aria-hidden="true"></div>
+  <div class="foot-links">
+    <a href={`${base}/about`}>About</a>
+    <a href={`${base}/about#colophon`}>Colophon</a>
+    <a href="#">RSS</a>
+  </div>
+  <div class="foot-copy">© {new Date().getFullYear()} Braulio &middot; All rights reserved</div>
+</footer>
