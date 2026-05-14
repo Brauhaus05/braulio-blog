@@ -4,7 +4,7 @@ const { pathname } = Astro.url;
 
 function isActive(href: string): boolean {
   if (href === `${base}/`) return pathname === `${base}/` || pathname === base;
-  return pathname.startsWith(href);
+  return pathname === href || pathname.startsWith(href + '/');
 }
 ---
 <header class="site-header">
