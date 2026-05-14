@@ -64,6 +64,14 @@ describe('getFeaturedPost', () => {
   it('returns undefined for empty array', () => {
     expect(getFeaturedPost([])).toBeUndefined();
   });
+
+  it('excludes draft posts from the fallback', () => {
+    const posts = [
+      makePost({ slug: 'draft-post', draft: true, featured: false }),
+      makePost({ slug: 'live-post', featured: false }),
+    ];
+    expect(getFeaturedPost(posts)?.slug).toBe('live-post');
+  });
 });
 
 describe('groupByCategory', () => {
