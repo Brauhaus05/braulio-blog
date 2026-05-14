@@ -1,0 +1,32 @@
+---
+import type { PostEntry } from '../../lib/posts';
+
+interface Props {
+  post: PostEntry;
+}
+const { post } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const href = `${base}/posts/${post.slug}`;
+const date = post.data.date.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric',
+});
+---
+<section class="featured">
+  <a
+    href={href}
+    class="featured__media"
+    aria-label={`${post.data.title} — featured post`}
+    style={post.data.heroImage ? `background-image: url('${post.data.heroImage}');` : ''}
+  ></a>
+  <div class="featured__body">
+    <div>
+      <div class="featured__kicker">{post.data.category}</div>
+      <h2 class="featured__title">{post.data.title}</h2>
+      <p class="featured__excerpt">{post.data.deck}</p>
+    </div>
+    <div class="featured__foot">
+      <span class="featured__date">{date}</span>
+      <a href={href} class="featured__cta">Read</a>
+    </div>
+  </div>
+</section>

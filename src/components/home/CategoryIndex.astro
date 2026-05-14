@@ -1,0 +1,23 @@
+---
+import type { PostEntry } from '../../lib/posts';
+import { groupByCategory, getPublishedPosts } from '../../lib/posts';
+
+interface Props {
+  posts: PostEntry[];
+}
+const { posts } = Astro.props;
+const published = getPublishedPosts(posts);
+const grouped = groupByCategory(published);
+const categories = Object.entries(grouped).sort((a, b) => b[1].length - a[1].length);
+---
+<div class="index">
+  <div class="index__title">Index &mdash; By Category</div>
+  <ul class="index__list">
+    {categories.map(([name, items], i) => (
+      <li>
+        <span>{String(i + 1).padStart(2, '0')} &middot; {name}</span>
+        <span class="count">{String(items.length).padStart(2, '0')}</span>
+      </li>
+    ))}
+  </ul>
+</div>

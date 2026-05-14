@@ -1,0 +1,32 @@
+---
+import type { PostEntry } from '../../lib/posts';
+
+interface Props {
+  post: PostEntry;
+  index: number;
+}
+const { post, index } = Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const href = `${base}/posts/${post.slug}`;
+const num = String(index + 1).padStart(2, '0');
+const date = post.data.date.toLocaleDateString('en-GB', {
+  day: 'numeric', month: 'short', year: 'numeric',
+});
+---
+<article class="article-card">
+  <span class="article-card__num">{num}</span>
+  <span class="article-card__kicker">{post.data.category}</span>
+  <h3 class="article-card__title">
+    <a href={href}>{post.data.title}</a>
+  </h3>
+  <p class="article-card__excerpt">{post.data.deck}</p>
+  <div class="article-card__foot">
+    <span class="article-card__date">{date}</span>
+    <a href={href} class="readmore">
+      Read more
+      <svg viewBox="0 0 10 10" fill="none" aria-hidden="true">
+        <path class="arrow-line" d="M0 5h9M5 1l4 4-4 4" stroke="currentColor" stroke-width="1.4" />
+      </svg>
+    </a>
+  </div>
+</article>
