@@ -27,19 +27,19 @@ draft: false
 ---
 ```
 
-| Field | Required | Notes |
-|---|---|---|
-| `title` | Yes | Displayed as the large Anton heading |
-| `deck` | Yes | Standfirst paragraph below the title |
-| `date` | Yes | Format: `YYYY-MM-DD` |
-| `issue` | Yes | e.g. `"No. 05"` |
-| `category` | Yes | Appears in nav, archive, and cards |
-| `tags` | No | Array of strings, defaults to `[]` |
-| `readTime` | Yes | Minutes, used in sidebar and admin |
-| `heroImage` | No | Path starting with `/blog/assets/` |
-| `heroCaption` | No | Caption for the hero image bar |
-| `featured` | No | `true` makes this the homepage featured card (one post at a time) |
-| `draft` | No | `true` hides from public pages, visible in admin only |
+| Field         | Required | Notes                                                             |
+| ------------- | -------- | ----------------------------------------------------------------- |
+| `title`       | Yes      | Displayed as the large Anton heading                              |
+| `deck`        | Yes      | Standfirst paragraph below the title                              |
+| `date`        | Yes      | Format: `YYYY-MM-DD`                                              |
+| `issue`       | Yes      | e.g. `"No. 05"`                                                   |
+| `category`    | Yes      | Appears in nav, archive, and cards                                |
+| `tags`        | No       | Array of strings, defaults to `[]`                                |
+| `readTime`    | Yes      | Minutes, used in sidebar and admin                                |
+| `heroImage`   | No       | Path starting with `/blog/assets/`                                |
+| `heroCaption` | No       | Caption for the hero image bar                                    |
+| `featured`    | No       | `true` makes this the homepage featured card (one post at a time) |
+| `draft`       | No       | `true` hides from public pages, visible in admin only             |
 
 ---
 
@@ -50,11 +50,13 @@ Use these anywhere in the post body:
 ```mdx
 <Dropcap>T</Dropcap>he first letter of a paragraph, rendered large.
 
-<PullQuote cite="Source name">
-  The quoted text goes here.
-</PullQuote>
+<PullQuote cite="Source name">The quoted text goes here.</PullQuote>
 
-<HeroImage src="/blog/assets/image.png" caption="Fig. 01 · Description" credit="Photo · B.A." />
+<HeroImage
+  src="/blog/assets/image.png"
+  caption="Fig. 01 · Description"
+  credit="Photo · B.A."
+/>
 
 <TwinImage
   left="/blog/assets/left.png"
@@ -71,6 +73,7 @@ Add images to `public/assets/` before referencing them.
 ## Drafts
 
 Set `draft: true` while writing. The post:
+
 - Does **not** appear on the homepage, archive, or post routes
 - **Does** appear in the admin dashboard at `https://braulio.ca/blog/admin`
 
