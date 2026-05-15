@@ -18,7 +18,7 @@ function isActive(href: string): boolean {
       <a href={`${base}/archive`} class:list={[{ 'is-active': isActive(`${base}/archive`) }]}>Archive</a>
       <a href={`${base}/about`}   class:list={[{ 'is-active': isActive(`${base}/about`) }]}>About</a>
     </nav>
-    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-overlay">
+    <button type="button" class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-overlay">
       <span class="nav-toggle__bar"></span>
       <span class="nav-toggle__bar"></span>
       <span class="nav-toggle__bar"></span>

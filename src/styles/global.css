@@ -263,7 +263,6 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 767px) {
   .site-header {
     height: 72px;
-    position: relative;
   }
   .brand__mark {
     width: 44px;
