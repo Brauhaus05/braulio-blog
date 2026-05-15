@@ -361,3 +361,26 @@
       gap: 24px;
     }
   }
+
+  @media (max-width: 767px) {
+    .archive-row {
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto;
+      row-gap: 6px;
+      padding: 14px 0;
+      align-items: baseline;
+    }
+    .archive-row__title {
+      grid-column: 1 / -1;
+      grid-row: 1;
+    }
+    .archive-row__cat {
+      grid-column: 1;
+      grid-row: 2;
+      margin-right: 0;
+    }
+    .archive-row__date {
+      grid-column: 2;
+      grid-row: 2;
+    }
+  }
