@@ -18,5 +18,40 @@ function isActive(href: string): boolean {
       <a href={`${base}/archive`} class:list={[{ 'is-active': isActive(`${base}/archive`) }]}>Archive</a>
       <a href={`${base}/about`}   class:list={[{ 'is-active': isActive(`${base}/about`) }]}>About</a>
     </nav>
+    <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false" aria-controls="nav-overlay">
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+      <span class="nav-toggle__bar"></span>
+    </button>
   </div>
+  <nav class="nav-overlay" id="nav-overlay" aria-hidden="true">
+    <a href={`${base}/`}        class:list={[{ 'is-active': isActive(`${base}/`) }]}>Journal</a>
+    <a href={`${base}/archive`} class:list={[{ 'is-active': isActive(`${base}/archive`) }]}>Archive</a>
+    <a href={`${base}/about`}   class:list={[{ 'is-active': isActive(`${base}/about`) }]}>About</a>
+  </nav>
 </header>
+
+<script>
+  const toggle = document.getElementById('nav-toggle') as HTMLButtonElement | null;
+  const overlay = document.getElementById('nav-overlay') as HTMLElement | null;
+
+  function openNav() {
+    document.body.setAttribute('data-nav-open', '');
+    toggle?.setAttribute('aria-expanded', 'true');
+    overlay?.removeAttribute('aria-hidden');
+  }
+
+  function closeNav() {
+    document.body.removeAttribute('data-nav-open');
+    toggle?.setAttribute('aria-expanded', 'false');
+    overlay?.setAttribute('aria-hidden', 'true');
+  }
+
+  toggle?.addEventListener('click', () => {
+    document.body.hasAttribute('data-nav-open') ? closeNav() : openNav();
+  });
+
+  overlay?.querySelectorAll('a').forEach(link => link.addEventListener('click', closeNav));
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeNav(); });
+</script>
