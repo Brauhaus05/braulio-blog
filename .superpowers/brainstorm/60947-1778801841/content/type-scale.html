@@ -1,0 +1,51 @@
+<h2>How should the display type scale down?</h2>
+<p class="subtitle">The hero headline is 160px Anton, post titles are 144px. At 390px wide, these need to shrink significantly. Three philosophies:</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;padding:20px 16px;font-family:sans-serif;border-bottom:1px solid #333;min-height:120px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:52px;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;">DESIGN<br>&amp; THE<br>UNSEEN</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(51,51,51,0.5);margin-top:8px;">mobile · 52px (was 160px)</div>
+    </div>
+    <div class="card-body">
+      <h3>A — Fluid with <code>clamp()</code></h3>
+      <p>Type scales smoothly between a min and max using viewport units. No hard breakpoints — always proportional. <strong>160px → ~52px</strong> at 390px.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Buttery smooth at every width</li><li>No magic numbers per breakpoint</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Less editorial control</li><li>In-between sizes can look awkward</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;padding:20px 16px;font-family:sans-serif;border-bottom:1px solid #333;min-height:120px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:64px;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;">DESIGN<br>&amp; THE<br>UNSEEN</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(51,51,51,0.5);margin-top:8px;">mobile · 64px (was 160px)</div>
+    </div>
+    <div class="card-body">
+      <h3>B — Fixed steps per breakpoint</h3>
+      <p>Deliberate type sizes locked to each breakpoint. <strong>160px (desktop) → 96px (tablet) → 64px (mobile)</strong>. Editorial rhythm is intentional at every size.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Designer controls every step</li><li>Feels intentional &amp; editorial</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>More breakpoint rules to maintain</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;padding:20px 16px;font-family:sans-serif;border-bottom:1px solid #333;min-height:120px;display:flex;flex-direction:column;justify-content:center;">
+      <div style="font-family:'Arial Narrow',sans-serif;font-weight:900;font-size:15vw;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;word-break:break-word;">DESIGN &amp; THE UNSEEN</div>
+      <div style="font-size:10px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:rgba(51,51,51,0.5);margin-top:8px;">mobile · always fills container width</div>
+    </div>
+    <div class="card-body">
+      <h3>C — Full-width display type</h3>
+      <p>Headlines always fill the container using <code>font-size: clamp()</code> or <code>vw</code> tuned so text bleeds edge-to-edge. Very brutalist — the type IS the layout.</p>
+      <div class="pros-cons">
+        <div class="pros"><h4>Pros</h4><ul><li>Maximum brutalist impact</li><li>Works at any width automatically</li></ul></div>
+        <div class="cons"><h4>Cons</h4><ul><li>Multi-word headlines can break awkwardly</li><li>Readability varies by title length</li></ul></div>
+      </div>
+    </div>
+  </div>
+
+</div>

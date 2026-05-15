@@ -1,0 +1,79 @@
+<h2>What happens to the post sidebar on mobile?</h2>
+<p class="subtitle">Currently: 282px sticky sidebar (TOC, meta, share buttons) + article body. At mobile widths the two-column layout has to go.</p>
+
+<div class="cards">
+
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;border-bottom:1px solid #333;padding:12px;font-family:sans-serif;display:flex;gap:8px;">
+      <div style="width:90px;border:2px solid #333;border-radius:4px;padding:6px;background:#ebebdc;flex-shrink:0;">
+        <div style="font-size:5px;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:#333;border-bottom:1px solid #333;padding-bottom:3px;margin-bottom:3px;">← BACK · ARCHITECTURE · 8 MIN</div>
+        <div style="font-family:'Arial Narrow',sans-serif;font-size:18px;font-weight:900;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;margin-bottom:4px;">POST TITLE</div>
+        <div style="font-size:6px;line-height:1.4;color:#555;border-top:1px solid #333;padding-top:4px;margin-bottom:4px;">Deck text here — the subheadline that sets up the piece…</div>
+        <div style="background:#ccc;height:36px;border:1px solid #999;margin-bottom:4px;"></div>
+        <div style="font-size:6px;color:#555;line-height:1.4;">Article body text begins here. The full reading experience without any sidebar interruption…</div>
+      </div>
+      <div style="flex:1;font-size:9px;color:#555;line-height:1.5;padding-top:4px;">
+        Sidebar content (meta, TOC, share) is <strong>hidden</strong> on mobile. Just the article.
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Hide sidebar, article full-width</h3>
+      <p>Remove the sidebar entirely on mobile. Meta (date, category, read time) folds into the article eyebrow. TOC and share buttons disappear. Maximum reading focus.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;border-bottom:1px solid #333;padding:12px;font-family:sans-serif;display:flex;gap:8px;">
+      <div style="width:90px;border:2px solid #333;border-radius:4px;padding:6px;background:#ebebdc;flex-shrink:0;">
+        <!-- meta bar collapsed -->
+        <div style="border:1px solid #333;padding:3px 5px;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-size:5px;font-weight:700;text-transform:uppercase;color:#333;">ARCHITECTURE · 8 MIN</div>
+            <div style="font-size:5px;color:rgba(51,51,51,0.5);text-transform:uppercase;font-weight:700;">May 2026</div>
+          </div>
+          <div style="font-size:8px;color:#333;">▼</div>
+        </div>
+        <div style="font-family:'Arial Narrow',sans-serif;font-size:18px;font-weight:900;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;margin-bottom:4px;">POST TITLE</div>
+        <div style="font-size:6px;line-height:1.4;color:#555;border-top:1px solid #333;padding-top:4px;margin-bottom:4px;">Deck text…</div>
+        <div style="font-size:6px;color:#555;line-height:1.4;">Article body text begins here…</div>
+      </div>
+      <div style="flex:1;font-size:9px;color:#555;line-height:1.5;padding-top:4px;">
+        Meta + TOC in a <strong>collapsible strip</strong> above the title. Tap ▼ to expand.
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Collapsible meta strip above title</h3>
+      <p>Sidebar content collapses into a slim bar above the post title. Tap to reveal TOC and full meta. Share buttons stay inline at the article end.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image" style="background:#ebebdc;border-bottom:1px solid #333;padding:12px;font-family:sans-serif;display:flex;gap:8px;">
+      <div style="width:90px;border:2px solid #333;border-radius:4px;padding:6px;background:#ebebdc;flex-shrink:0;">
+        <div style="font-family:'Arial Narrow',sans-serif;font-size:18px;font-weight:900;line-height:0.92;letter-spacing:-0.02em;text-transform:uppercase;color:#333;margin-bottom:3px;">POST TITLE</div>
+        <!-- inline meta -->
+        <div style="display:flex;gap:6px;border-top:1px solid #333;border-bottom:1px solid #333;padding:3px 0;margin-bottom:4px;">
+          <span style="font-size:5px;font-weight:700;text-transform:uppercase;color:#333;">ARCH</span>
+          <span style="font-size:5px;font-weight:700;text-transform:uppercase;color:rgba(51,51,51,0.5);">8 MIN</span>
+          <span style="font-size:5px;font-weight:700;text-transform:uppercase;color:rgba(51,51,51,0.5);">MAY 26</span>
+        </div>
+        <div style="background:#ccc;height:30px;border:1px solid #999;margin-bottom:4px;"></div>
+        <div style="font-size:6px;color:#555;line-height:1.4;margin-bottom:4px;">Article body…</div>
+        <!-- TOC inline -->
+        <div style="border-top:1px solid #333;padding-top:3px;">
+          <div style="font-size:5px;font-weight:700;text-transform:uppercase;color:rgba(51,51,51,0.5);margin-bottom:2px;">IN THIS ARTICLE</div>
+          <div style="font-size:5px;font-weight:700;text-transform:uppercase;color:#333;border-bottom:1px solid rgba(51,51,51,0.2);padding-bottom:2px;margin-bottom:2px;">01 · Section one</div>
+          <div style="font-size:5px;font-weight:700;text-transform:uppercase;color:#333;border-bottom:1px solid rgba(51,51,51,0.2);padding-bottom:2px;">02 · Section two</div>
+        </div>
+      </div>
+      <div style="flex:1;font-size:9px;color:#555;line-height:1.5;padding-top:4px;">
+        Meta inline below title. TOC renders <strong>inline before body</strong> text.
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Stack everything inline</h3>
+      <p>Sidebar content reflows into the article stream: meta row below the title, TOC before the body text, share at the end. No JS, pure CSS reflow.</p>
+    </div>
+  </div>
+
+</div>
