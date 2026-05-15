@@ -9,7 +9,7 @@
   .home-hero h1 {
     margin: 0;
     font-family: "Anton", sans-serif;
-    font-size: clamp(56px, 13.75vw, 160px);
+    font-size: clamp(56px, 12.5vw, 160px);
     line-height: 0.92;
     letter-spacing: -0.025em;
     text-transform: uppercase;
@@ -68,7 +68,7 @@
   .featured__title {
     margin: 0;
     font-family: "Anton", sans-serif;
-    font-size: clamp(28px, 4.17vw, 48px);
+    font-size: clamp(28px, 3.75vw, 48px);
     line-height: 0.95;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -217,7 +217,7 @@
     padding: 20px 0;
     border-bottom: var(--hair) solid var(--line);
     font-family: "Anton", sans-serif;
-    font-size: clamp(20px, 2.8vw, 32px);
+    font-size: clamp(20px, 2.5vw, 32px);
     letter-spacing: -0.01em;
     text-transform: uppercase;
     transition: padding-left 160ms ease;
@@ -242,7 +242,7 @@
   }
   .pagination__more {
     font-family: "Anton", sans-serif;
-    font-size: clamp(28px, 4.86vw, 56px);
+    font-size: clamp(28px, 4.375vw, 56px);
     line-height: 1;
     letter-spacing: -0.02em;
     cursor: pointer;
@@ -266,7 +266,7 @@
     white-space: nowrap;
     animation: scroll 40s linear infinite;
     font-family: "Anton", sans-serif;
-    font-size: clamp(20px, 2.5vw, 28px);
+    font-size: clamp(20px, 2.19vw, 28px);
     letter-spacing: 0.02em;
     text-transform: uppercase;
   }
@@ -293,7 +293,7 @@
 
   .archive-row__title {
     font-family: "Anton", sans-serif;
-    font-size: clamp(20px, 2.8vw, 32px);
+    font-size: clamp(20px, 2.5vw, 32px);
     letter-spacing: -0.01em;
     text-transform: uppercase;
   }
