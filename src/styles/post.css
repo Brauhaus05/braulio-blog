@@ -53,7 +53,7 @@
 
   .post-title {
     font-family: "Anton", sans-serif;
-    font-size: 144px;
+    font-size: clamp(48px, 11.25vw, 144px);
     line-height: 0.88;
     letter-spacing: -0.025em;
     text-transform: uppercase;
@@ -88,7 +88,7 @@
   .post-body h2 {
     font-family: "Anton", sans-serif;
     font-weight: 400;
-    font-size: 56px;
+    font-size: clamp(32px, 4.375vw, 56px);
     line-height: 1;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -119,7 +119,7 @@
     font-family: "Montserrat", sans-serif;
     font-style: italic;
     font-weight: 400;
-    font-size: 30px;
+    font-size: clamp(20px, 2.34vw, 30px);
     line-height: 40px;
     letter-spacing: -0.005em;
     position: relative;
@@ -181,3 +181,47 @@
     gap: 12px;
   }
   .post-outro__next:hover { padding-right: 8px; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+.post-mobile-share { display: none; }
+
+@media (max-width: 767px) {
+  .post-wrap {
+    grid-template-columns: 1fr;
+    padding: 48px var(--pad-x) 80px;
+    column-gap: 0;
+  }
+
+  .post-sidebar {
+    position: static;
+    order: 2;
+  }
+
+  .post-sidebar .share {
+    display: none;
+  }
+
+  .post-body {
+    max-width: 100%;
+    order: 1;
+  }
+
+  .post-body p {
+    max-width: 100%;
+  }
+
+  .post-outro {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .post-mobile-share {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 32px;
+    margin-top: 32px;
+    border-top: var(--hair) solid var(--ink);
+  }
+}

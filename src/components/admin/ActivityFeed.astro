@@ -1,0 +1,33 @@
+---
+import type { PostEntry } from '../../lib/posts';
+
+interface Props {
+  posts: PostEntry[];
+}
+const { posts } = Astro.props;
+const recent = [...posts]
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 6);
+---
+<section class="activity" style="grid-column: span 3;">
+  <div class="card-title-row">
+    <h3>Recent</h3>
+  </div>
+  {recent.map(post => {
+    const date = post.data.date.toLocaleDateString('en-GB', {
+      day: 'numeric', month: 'short',
+    });
+    return (
+      <div class="item">
+        <div class="stem">
+          <div class={`pip ${post.data.draft ? '' : 'dot'}`}></div>
+        </div>
+        <div class="body">
+          <strong>{post.data.draft ? 'Draft' : 'Published'}</strong>{' '}
+          <span class="ref">{post.slug}</span>
+        </div>
+        <time datetime={post.data.date.toISOString().slice(0, 10)}>{date}</time>
+      </div>
+    );
+  })}
+</section>

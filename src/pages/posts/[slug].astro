@@ -5,6 +5,7 @@ import PageShell from '../../components/layout/PageShell.astro';
 import SiteHeader from '../../components/layout/SiteHeader.astro';
 import SiteFooter from '../../components/layout/SiteFooter.astro';
 import PostSidebar from '../../components/post/PostSidebar.astro';
+import ShareButtons from '../../components/post/ShareButtons.astro';
 import Dropcap from '../../components/mdx/Dropcap.astro';
 import PullQuote from '../../components/mdx/PullQuote.astro';
 import HeroImage from '../../components/mdx/HeroImage.astro';
@@ -52,6 +53,9 @@ const nextPost = published[currentIndex + 1];
       <h1 class="post-title">{post.data.title}</h1>
       <p class="post-deck">{post.data.deck}</p>
       <Content components={{ Dropcap, PullQuote, HeroImage, TwinImage }} />
+      <div class="post-mobile-share">
+        <ShareButtons url={postUrl} title={post.data.title} />
+      </div>
       {nextPost && (
         <div class="post-outro">
           <span class="post-outro__label">Next entry</span>
