@@ -194,6 +194,7 @@
 
   .post-sidebar {
     position: static;
+    order: 2;
   }
 
   .post-sidebar .share {
@@ -202,6 +203,7 @@
 
   .post-body {
     max-width: 100%;
+    order: 1;
   }
 
   .post-body p {
