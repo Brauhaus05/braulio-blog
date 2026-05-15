@@ -345,3 +345,19 @@
       grid-template-columns: 2fr 1fr;
     }
   }
+
+  @media (max-width: 767px) {
+    .grid-3 {
+      grid-template-columns: 1fr 1fr;
+    }
+    .col.sidebar {
+      grid-column: 1 / -1;
+      border-left: none;
+    }
+
+    .pagination {
+      height: auto;
+      padding: 32px var(--pad-x);
+      gap: 24px;
+    }
+  }
