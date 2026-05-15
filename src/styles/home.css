@@ -319,3 +319,29 @@
   .archive-category-list {
     padding: 0 var(--pad-x);
   }
+
+  /* ── RESPONSIVE ─────────────────────────────────────────────── */
+  @media (max-width: 767px) {
+    .home-hero {
+      padding: 48px var(--pad-x);
+    }
+    .home-hero__meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .featured {
+      grid-template-columns: 1fr;
+    }
+    .featured__media {
+      border-right: none;
+      border-bottom: var(--hair) solid var(--line);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .featured {
+      grid-template-columns: 2fr 1fr;
+    }
+  }
