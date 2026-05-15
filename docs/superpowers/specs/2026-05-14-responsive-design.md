@@ -19,7 +19,7 @@ Three breakpoints, each a deliberate editorial state:
 ### Token changes
 
 ```css
-/* base (mobile) */
+/* base (mobile) — overrides existing :root { --pad-x: 64px } in global.css */
 :root {
   --pad-x: 16px;
 }
@@ -28,8 +28,12 @@ Three breakpoints, each a deliberate editorial state:
   :root { --pad-x: 40px; }
 }
 
-/* lg inherits existing --pad-x: 64px from desktop styles */
+@media (min-width: 1280px) {
+  :root { --pad-x: 64px; } /* restores original value */
+}
 ```
+
+> **Implementation note:** The existing `--pad-x: 64px` in `:root` inside `global.css` must be moved down to the `lg` media query. The base `:root` takes `16px`.
 
 ### Page wrapper
 
@@ -96,8 +100,8 @@ No layout changes. Font size uses `clamp(20px, 2.5vw, 28px)`.
 - **md+:** Restore `grid-template-columns: 2fr 1fr`.
 
 ### Article grid (`.grid-3`) + sidebar
-- **base:** Articles become `grid-template-columns: 1fr 1fr` (2-col). Sidebar content (newsletter, category index) drops below articles, full-width, stacked in source order.
-- **md+:** Restore `grid-template-columns: 1fr 1fr 1fr` with sidebar as third column.
+- **base:** Articles become `grid-template-columns: 1fr 1fr` (2-col). The `.col.sidebar` (third child) gets `grid-column: 1 / -1` so it spans the full width below the article columns. Newsletter and category index stack inside it in source order.
+- **md+:** Restore `grid-template-columns: 1fr 1fr 1fr`; remove `grid-column` override so sidebar returns to third column. Sidebar content stacks vertically inside as before.
 
 ### Pagination
 - **base:** `height: auto; padding: 32px var(--pad-x)`. Gap tightens to `24px`. "MORE" uses `clamp()`.
