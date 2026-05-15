@@ -181,3 +181,45 @@
     gap: 12px;
   }
   .post-outro__next:hover { padding-right: 8px; }
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+.post-mobile-share { display: none; }
+
+@media (max-width: 767px) {
+  .post-wrap {
+    grid-template-columns: 1fr;
+    padding: 48px var(--pad-x) 80px;
+    column-gap: 0;
+  }
+
+  .post-sidebar {
+    position: static;
+  }
+
+  .post-sidebar .share {
+    display: none;
+  }
+
+  .post-body {
+    max-width: 100%;
+  }
+
+  .post-body p {
+    max-width: 100%;
+  }
+
+  .post-outro {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+
+  .post-mobile-share {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 32px;
+    margin-top: 32px;
+    border-top: var(--hair) solid var(--ink);
+  }
+}
